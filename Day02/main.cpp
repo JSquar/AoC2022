@@ -5,7 +5,7 @@
  * -----
  *
  * -----
- * Last Modified: Friday, 2nd December 2022 7:32:54 pm
+ * Last Modified: Saturday, 3rd December 2022 1:11:53 am
  * Modified By: Jannek Squar (jannek.squar@uni-hamburg.de)
  * -----
  * Copyright (c) 2022 Jannek Squar
@@ -24,14 +24,46 @@ int main(int argc, char *argv[]) {
   return RUN_ALL_TESTS();
 }
 
-TEST(Testsuite, input_small) {
+TEST(Testsuite_input_small, read) {
   std::string file = "input_small.txt";
-  std::list<std::string> output;
+  std::list<char> output;
   read_input(file, output);
 
-  //   for (std::list<std::string>::iterator &iter : output) {
-  std::cout << "Hallo Welt! " << output.size() << "\n";
-  for (std::string iter : output) {
-    std::cout << iter << std::endl;
-  }
+  std::list<char>::const_iterator citer = output.cbegin();
+  EXPECT_EQ('A', *citer);
+  EXPECT_EQ('Y', *std::next(citer, 1));
+  EXPECT_EQ('B', *std::next(citer, 2));
+  EXPECT_EQ('X', *std::next(citer, 3));
+  EXPECT_EQ('C', *std::next(citer, 4));
+  EXPECT_EQ('Z', *std::next(citer, 5));
+}
+
+TEST(Testsuite_input_small, get_single_result) {
+  std::string file = "input_small.txt";
+  std::list<char> output;
+  read_input(file, output);
+  std::list<char>::const_iterator citer = output.cbegin();
+
+  EXPECT_EQ(8,
+            get_single_result((*std::next(citer, 0)), (*std::next(citer, 1))));
+  EXPECT_EQ(1,
+            get_single_result((*std::next(citer, 2)), (*std::next(citer, 3))));
+  EXPECT_EQ(6,
+            get_single_result((*std::next(citer, 4)), (*std::next(citer, 5))));
+}
+
+TEST(Testsuite_input_small, get_final_result) {
+  std::string file = "input_small.txt";
+  std::list<char> output;
+  read_input(file, output);
+
+  EXPECT_EQ(15, get_all_results(output, &get_single_result));
+}
+
+TEST(Testsuite_input_big, final_answer_a) {
+  std::string file = "input_big.txt";
+  std::list<char> output;
+  read_input(file, output);
+
+  EXPECT_EQ(9759, get_all_results(output, &get_single_result));
 }
